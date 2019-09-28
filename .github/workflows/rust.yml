@@ -6,8 +6,8 @@ on:
     - master
 
 jobs:
-  build_and_test:
-    name: Builds and tests Rust (stable) on ${{ matrix.os }}    
+  check:
+    name: Checks code against Rust stable on ${{ matrix.os }}    
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -15,7 +15,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+    - uses: actions-rs/cargo@v1
+      with:
+        command: check
